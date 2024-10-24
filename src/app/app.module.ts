@@ -1,10 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { TransactionComponent } from './transaction/transaction.component';
-import { BalanceComponent } from './balance/balance.component';
-import { SavingComponent } from './saving/saving.component';
+import { TransactionComponent } from './components/transaction/transaction.component';
+import { BalanceComponent } from './components/balance/balance.component';
+import { SavingComponent } from './components/saving/saving.component';
+import { HomeComponent } from './pages/home/home.component';
+import { RouterModule } from '@angular/router';
+import { routes } from './app.routes';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
@@ -12,11 +17,11 @@ import { SavingComponent } from './saving/saving.component';
     TransactionComponent,
     BalanceComponent,
     SavingComponent,
+    HomeComponent,
+    NavBarComponent,
   ],
-  imports: [
-    BrowserModule
-  ],
+  imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
