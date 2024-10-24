@@ -1,0 +1,30 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <h2 class="text-3xl font-extrabold mt-6 mb-8">Home</h2>
+  <!-- Balance Section -->
+  <section class="mb-8">
+    <app-balance 
+      [currentBalance]="currentBalance"
+      (onTransferToSaving)="handleTransferToSaving($event)">
+    </app-balance>
+  </section>
+
+  <!-- Stats Cards Grid -->
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <!-- Income Transaction Form -->
+    <app-transaction 
+      [transactionType]="TransactionType.INCOME"
+      (onTransactionAdded)="handleAddTransaction($event)">
+    </app-transaction>
+
+    <!-- Expense Transaction Form -->
+    <app-transaction 
+      [transactionType]="TransactionType.EXPENSE"
+      (onTransactionAdded)="handleAddTransaction($event)">
+    </app-transaction>
+  </section>
+
+  <!-- Transaction History -->
+  <section class="mt-8">
+    <h2 class="text-xl font-bold mb-4">Transaction History</h2>
+  </section>
+</div>
