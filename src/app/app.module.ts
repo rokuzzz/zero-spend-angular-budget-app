@@ -10,17 +10,18 @@ import { HomeComponent } from './pages/home/home.component';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TransactionComponent,
     BalanceComponent,
     SavingComponent,
     HomeComponent,
     NavBarComponent,
   ],
-  imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
+  imports: [BrowserModule, FormsModule, MatFormFieldModule, RouterModule.forRoot(routes), BrowserAnimationsModule, TransactionComponent],
   providers: [],
   bootstrap: [AppComponent],
 })
