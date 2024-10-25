@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class TransactionService {
 
   transactions$ = this.transactionsSubject.asObservable();
 
-  constructor() {}
+  constructor(private toastr: ToastrService) {}
 
   private loadTransactions(): Transaction[] {
     const stored = localStorage.getItem(this.STORAGE_KEY);
@@ -36,10 +37,20 @@ export class TransactionService {
     this.transactionsSubject.next(transactions);
   }
 
-  addTransaction(transaction: Transaction) {
+  addTransaction(transaction: Transaction): boolean {
+    const currentBalance = this.calculateBalance();
+
+    if (transaction.type === 'expense' && transaction.amount > currentBalance) {
+      this.toastr.error('Insufficient balance for this transaction', 'Error');
+      return false;
+    }
+
     const currentTransactions = this.transactionsSubject.value;
     const updatedTransactions = [transaction, ...currentTransactions];
     this.saveTransactions(updatedTransactions);
+
+    this.toastr.success('Transaction added successfully', 'Success');
+    return true;
   }
 
   getTransactions(): Transaction[] {

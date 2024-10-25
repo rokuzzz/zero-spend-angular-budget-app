@@ -12,6 +12,7 @@ import { routes } from './app.routes';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     HomeComponent,
     NavBarComponent,
   ],
-  imports: [BrowserModule, FormsModule, MatFormFieldModule, RouterModule.forRoot(routes), BrowserAnimationsModule, TransactionComponent],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    MatFormFieldModule,
+    RouterModule.forRoot(routes),
+    BrowserAnimationsModule,
+    TransactionComponent,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+      timeOut: 3000,
+    }),
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
