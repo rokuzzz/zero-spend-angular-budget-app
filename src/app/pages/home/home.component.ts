@@ -1,21 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Transaction, TransactionType } from '../../models/transaction.model';
+import { TransactionService } from 'src/app/services/transaction.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
-export class HomeComponent {
-  currentBalance: number = 0;
-  savingAmount: number = 0;
+export class HomeComponent implements OnInit {
   TransactionType = TransactionType;
+  currentBalance = 0;
+  savingAmount = 0;
+  transactions: Transaction[] = [];
+
+  constructor(private transactionService: TransactionService) {}
+
+  ngOnInit() {
+    this.transactionService.transactions$.subscribe(transactions => {
+      this.transactions = transactions;
+      this.currentBalance = this.transactionService.calculateBalance();
+    });
+  }
 
   handleAddTransaction(transaction: Transaction) {
-    if (transaction.type === TransactionType.INCOME) {
-      this.currentBalance += transaction.amount;
-    } else {
-      this.currentBalance -= transaction.amount;
-    }
+    this.transactionService.addTransaction(transaction);
   }
 
   handleTransferToSaving(amount: number) {
