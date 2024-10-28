@@ -6,15 +6,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
-import { TransactionComponent } from './components/transaction/transaction.component';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { SavingsComponent } from './pages/savings/savings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
+    SavingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,7 +23,6 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
     MatFormFieldModule,
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
-    TransactionComponent,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,

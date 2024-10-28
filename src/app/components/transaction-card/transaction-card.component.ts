@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { TransactionType, Transaction } from '../../models/transaction.model';
 
 @Component({
-  selector: 'app-transaction',
+  selector: 'app-transaction-card',
   standalone: true,
   imports: [
     CommonModule,
@@ -16,9 +16,9 @@ import { TransactionType, Transaction } from '../../models/transaction.model';
     MatInputModule,
     MatButtonModule,
   ],
-  templateUrl: './transaction.component.html',
+  templateUrl: './transaction-card.component.html',
 })
-export class TransactionComponent {
+export class TransactionCardComponent {
   @Input() transactionType!: TransactionType;
   @Output() onTransactionAdded = new EventEmitter<Transaction>();
 
@@ -36,6 +36,45 @@ export class TransactionComponent {
 
   constructor(private _formBuilder: FormBuilder) {}
 
+  getCardTitle(): string {
+    switch (this.transactionType) {
+      case TransactionType.INCOME:
+        return 'Add Income';
+      case TransactionType.EXPENSE:
+        return 'Add Expense';
+      case TransactionType.SAVINGS:
+        return 'Add to Savings';
+      default:
+        return '';
+    }
+  }
+
+  getCardColor(): string {
+    switch (this.transactionType) {
+      case TransactionType.INCOME:
+        return 'text-green-600';
+      case TransactionType.EXPENSE:
+        return 'text-red-600';
+      case TransactionType.SAVINGS:
+        return 'text-purple-600';
+      default:
+        return '';
+    }
+  }
+
+  getPlaceholder(): string {
+    switch (this.transactionType) {
+      case TransactionType.INCOME:
+        return 'e.g., Salary, Gift';
+      case TransactionType.EXPENSE:
+        return 'e.g., Rent, Food';
+      case TransactionType.SAVINGS:
+        return 'e.g., Car Fund, Holiday';
+      default:
+        return '';
+    }
+  }
+
   onSubmit() {
     if (this.form.invalid) {
       Object.keys(this.form.controls).forEach((key) => {
@@ -47,7 +86,7 @@ export class TransactionComponent {
 
     const amount = this.form.get('amount')?.value;
     const title = this.form.get('title')?.value;
-     
+
     if (!amount || typeof title !== 'string') {
       return;
     }

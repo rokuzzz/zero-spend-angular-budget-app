@@ -1,10 +1,6 @@
 <div class="bg-white rounded-lg shadow p-6 [box-shadow:rgba(0,_0,_0,_0.24)_0px_3px_8px]">
-  <h2 class="text-xl font-semibold mb-4"
-      [ngClass]="{
-        'text-green-600': transactionType === 'income',
-        'text-red-600': transactionType === 'expense'
-      }">
-    Add {{ transactionType === 'income' ? 'Income' : 'Expense' }}
+  <h2 class="text-xl font-semibold mb-4" [ngClass]="getCardColor()">
+    {{ getCardTitle() }}
   </h2>
 
   <form [formGroup]="form" 
@@ -31,7 +27,7 @@
         matInput
         type="text"
         formControlName="title"
-        placeholder="e.g., Salary, Rent"
+        [placeholder]="getPlaceholder()"
       >
       <mat-error *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
         {{ getErrorMessage('title') }}
@@ -43,7 +39,7 @@
       type="submit"
       [disabled]="form.invalid"
     >
-      Add {{ transactionType === 'income' ? 'Income' : 'Expense' }}
+      {{ getCardTitle() }}
     </button>
   </form>
 </div>

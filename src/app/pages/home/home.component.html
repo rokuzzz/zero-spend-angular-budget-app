@@ -1,31 +1,38 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-  <h2 class="!text-3xl !font-extrabold mb-8">Home</h2>
+  <h2 class="!text-3xl !font-extrabold !mb-10">Home</h2>
+
   <!-- Balance Section -->
   <section class="mb-8">
-    <app-balance 
-      [currentBalance]="currentBalance"
-      [savingsAmount]="savingsAmount">
-    </app-balance>
+    <div>
+      <h3 class="!text-xl !font-bold">Total Balance</h3>
+      <div class="flex items-center">
+        <p class="text-3xl font-inter font-bold text-gray-900 flex items-start">
+          {{ currentBalance.toFixed(2) }}
+          <span class="ml-1 font-jetbrains text-xl font-medium text-gray-500">€</span>
+        </p>
+        <span class="text-md font-inter font-medium text-purple-600 mb-3 ml-2">
+          (+{{ savingsAmount.toFixed(2) }}€)
+        </span>
+      </div>
+    </div>
   </section>
 
   <!-- Stats Cards Grid -->
   <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <!-- Income Transaction Form -->
-    <app-transaction 
+    <app-transaction-card
       [transactionType]="TransactionType.INCOME"
       (onTransactionAdded)="handleAddTransaction($event)">
-    </app-transaction>
-
-    <!-- Expense Transaction Form -->
-    <app-transaction 
+    </app-transaction-card>
+  
+    <app-transaction-card 
       [transactionType]="TransactionType.EXPENSE"
       (onTransactionAdded)="handleAddTransaction($event)">
-    </app-transaction>
-
-    <!-- Savings Form -->
-    <app-savings
-      (onSavingsAdded)="handleAddTransaction($event)">
-    </app-savings>
+    </app-transaction-card>
+  
+    <app-transaction-card
+      [transactionType]="TransactionType.SAVINGS"
+      (onTransactionAdded)="handleAddTransaction($event)">
+    </app-transaction-card>
   </section>
 
   <!-- Transaction History -->
