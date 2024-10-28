@@ -11,7 +11,7 @@
     <!-- Title Column -->
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef> Title </th>
-      <td mat-cell *matCellDef="let transaction"> {{transaction.title}} </td>
+      <td mat-cell *matCellDef="let transaction"> {{ transaction.title || '—' }} </td>
     </ng-container>
 
     <!-- Type Column -->

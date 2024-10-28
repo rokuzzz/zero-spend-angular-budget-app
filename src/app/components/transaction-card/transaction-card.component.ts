@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TransactionType, Transaction } from '../../models/transaction.model';
 
 @Component({
@@ -15,12 +16,14 @@ import { TransactionType, Transaction } from '../../models/transaction.model';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatButtonToggleModule,
   ],
   templateUrl: './transaction-card.component.html',
 })
-export class TransactionCardComponent {
+export class TransactionCardComponent implements OnInit {
   @Input() transactionType!: TransactionType;
   @Output() onTransactionAdded = new EventEmitter<Transaction>();
+  TransactionType = TransactionType; // Make enum available in template
 
   form = this._formBuilder.group({
     amount: [
@@ -31,10 +34,25 @@ export class TransactionCardComponent {
         Validators.pattern(/^\d*\.?\d{0,2}$/),
       ],
     ],
-    title: [null, [Validators.required, Validators.pattern(/^(?!\s*$).+/)]],
+    title: [null], // Remove validators here
+    action: ['add', Validators.required],
   });
 
   constructor(private _formBuilder: FormBuilder) {}
+
+  ngOnInit() {
+    if (this.transactionType !== TransactionType.SAVINGS) {
+      this.form
+        .get('title')
+        ?.setValidators([
+          Validators.required,
+          Validators.pattern(/^(?!\s*$).+/),
+        ]);
+    } else {
+      this.form.get('title')?.clearValidators();
+    }
+    this.form.get('title')?.updateValueAndValidity();
+  }
 
   getCardTitle(): string {
     switch (this.transactionType) {
@@ -43,7 +61,7 @@ export class TransactionCardComponent {
       case TransactionType.EXPENSE:
         return 'Add Expense';
       case TransactionType.SAVINGS:
-        return 'Add to Savings';
+        return 'Modify Savings';
       default:
         return '';
     }
@@ -69,7 +87,7 @@ export class TransactionCardComponent {
       case TransactionType.EXPENSE:
         return 'e.g., Rent, Food';
       case TransactionType.SAVINGS:
-        return 'e.g., Car Fund, Holiday';
+        return ''; // No placeholder needed
       default:
         return '';
     }
@@ -86,14 +104,15 @@ export class TransactionCardComponent {
 
     const amount = this.form.get('amount')?.value;
     const title = this.form.get('title')?.value;
+    const action = this.form.get('action')?.value;
 
-    if (!amount || typeof title !== 'string') {
+    if (!amount) {
       return;
     }
 
     const transaction: Transaction = {
-      amount: Number(amount),
-      title: (title as string).trim(),
+      amount: Number(amount) * (action === 'withdraw' ? -1 : 1),
+      title: title ? (title as string).trim() : undefined,
       type: this.transactionType,
       date: new Date(),
     };
@@ -103,6 +122,7 @@ export class TransactionCardComponent {
     this.form.reset({
       amount: null,
       title: null,
+      action: 'add',
     });
   }
 

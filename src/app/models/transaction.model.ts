@@ -12,6 +12,6 @@ export enum TransactionType {
 export interface Transaction {
   amount: number;
   type: TransactionType;
-  title: string;
+  title?: string;
   date?: Date;
 }
