@@ -9,11 +9,13 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { AboutComponent } from './pages/about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
