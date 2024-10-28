@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TransactionComponent } from 'src/app/components/transaction/transaction.component';
 import { SavingsComponent } from 'src/app/components/saving/saving.component';
 import { BalanceComponent } from 'src/app/components/balance/balance.component';
+import { TransactionHistoryComponent } from "../../components/transaction-history/transaction-history.component";
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,8 @@ import { BalanceComponent } from 'src/app/components/balance/balance.component';
     TransactionComponent,
     SavingsComponent,
     BalanceComponent,
-  ],
+    TransactionHistoryComponent
+],
 })
 export class HomeComponent implements OnInit {
   TransactionType = TransactionType;
