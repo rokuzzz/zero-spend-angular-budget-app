@@ -1,16 +1,13 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-balance',
   templateUrl: './balance.component.html',
+  standalone: true,
+  imports: [CommonModule],
 })
 export class BalanceComponent {
   @Input() currentBalance: number = 0;
-  @Output() onTransferToSaving = new EventEmitter<number>();
-
-  transferToSavings(amount: number) {
-    if (amount <= this.currentBalance) {
-      this.onTransferToSaving.emit(amount);
-    }
-  }
+  @Input() savingsAmount: number = 0;
 }

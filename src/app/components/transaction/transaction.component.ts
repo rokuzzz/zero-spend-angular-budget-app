@@ -23,29 +23,48 @@ export class TransactionComponent {
   @Output() onTransactionAdded = new EventEmitter<Transaction>();
 
   form = this._formBuilder.group({
-    amount: [null, [Validators.required, Validators.min(0.01)]], // Changed from '' to null
-    title: [null, [Validators.required]], // Changed from '' to null
+    amount: [
+      null,
+      [
+        Validators.required,
+        Validators.min(0.01),
+        Validators.pattern(/^\d*\.?\d{0,2}$/),
+      ],
+    ],
+    title: [null, [Validators.required, Validators.pattern(/^(?!\s*$).+/)]],
   });
 
   constructor(private _formBuilder: FormBuilder) {}
 
   onSubmit() {
-    if (this.form.valid) {
-      const transaction: Transaction = {
-        amount: Number(this.form.value.amount),
-        title: this.form.value.title || '',
-        type: this.transactionType,
-        date: new Date(),
-      };
-
-      this.onTransactionAdded.emit(transaction);
-
-      // Simple reset
-      this.form.reset({
-        amount: null,
-        title: null,
+    if (this.form.invalid) {
+      Object.keys(this.form.controls).forEach((key) => {
+        const control = this.form.get(key);
+        control?.markAsTouched();
       });
+      return;
     }
+
+    const amount = this.form.get('amount')?.value;
+    const title = this.form.get('title')?.value;
+     
+    if (!amount || typeof title !== 'string') {
+      return;
+    }
+
+    const transaction: Transaction = {
+      amount: Number(amount),
+      title: (title as string).trim(),
+      type: this.transactionType,
+      date: new Date(),
+    };
+
+    this.onTransactionAdded.emit(transaction);
+
+    this.form.reset({
+      amount: null,
+      title: null,
+    });
   }
 
   getErrorMessage(fieldName: 'amount' | 'title'): string {
@@ -59,8 +78,17 @@ export class TransactionComponent {
       } is required`;
     }
 
-    if (fieldName === 'amount' && control.hasError('min')) {
-      return 'Amount must be greater than 0';
+    if (fieldName === 'amount') {
+      if (control.hasError('min')) {
+        return 'Amount must be greater than 0';
+      }
+      if (control.hasError('pattern')) {
+        return 'Invalid amount';
+      }
+    }
+
+    if (fieldName === 'title' && control.hasError('pattern')) {
+      return 'Title cannot be empty';
     }
 
     return '';

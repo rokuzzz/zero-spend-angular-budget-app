@@ -12,7 +12,8 @@
         class="flex flex-col gap-4">
     
     <mat-form-field appearance="fill" class="w-full">
-      <span matPrefix class="mr-2">€&nbsp;</span>
+      <mat-label>Amount</mat-label>
+      <span matPrefix class="ml-4 mr-2">€&nbsp;</span>
       <input 
         matInput
         type="number"
@@ -25,11 +26,12 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Title</mat-label>
       <input 
         matInput
         type="text"
         formControlName="title"
-        placeholder="e.g., Salary, Food"
+        placeholder="e.g., Salary, Rent"
       >
       <mat-error *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
         {{ getErrorMessage('title') }}
@@ -37,11 +39,9 @@
     </mat-form-field>
 
     <button 
-      mat-raised-button 
-      [color]="transactionType === 'income' ? 'primary' : 'warn'"
+      mat-raised-button
       type="submit"
       [disabled]="form.invalid"
-      class="w-full py-2"
     >
       Add {{ transactionType === 'income' ? 'Income' : 'Expense' }}
     </button>

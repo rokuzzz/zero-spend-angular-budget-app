@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Transaction } from '../models/transaction.model';
+import { Transaction, TransactionType } from '../models/transaction.model';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
@@ -37,11 +37,22 @@ export class TransactionService {
     this.transactionsSubject.next(transactions);
   }
 
+  // transaction.service.ts
   addTransaction(transaction: Transaction): boolean {
     const currentBalance = this.calculateBalance();
 
-    if (transaction.type === 'expense' && transaction.amount > currentBalance) {
-      this.toastr.error('Insufficient balance for this transaction', 'Error');
+    // Check for both expense and savings transactions
+    if (
+      (transaction.type === TransactionType.EXPENSE ||
+        transaction.type === TransactionType.SAVINGS) &&
+      transaction.amount > currentBalance
+    ) {
+      this.toastr.error(
+        transaction.type === TransactionType.SAVINGS
+          ? 'Insufficient balance to add to savings'
+          : 'Insufficient balance for this expense',
+        'Error'
+      );
       return false;
     }
 
@@ -49,7 +60,12 @@ export class TransactionService {
     const updatedTransactions = [transaction, ...currentTransactions];
     this.saveTransactions(updatedTransactions);
 
-    this.toastr.success('Transaction added successfully', 'Success');
+    this.toastr.success(
+      transaction.type === TransactionType.SAVINGS
+        ? 'Added to savings successfully'
+        : 'Transaction added successfully',
+      'Success'
+    );
     return true;
   }
 
@@ -57,10 +73,21 @@ export class TransactionService {
     return this.transactionsSubject.value;
   }
 
+  calculateSavings(): number {
+    return this.transactionsSubject.value.reduce((acc, curr) => {
+      return curr.type === TransactionType.SAVINGS ? acc + curr.amount : acc;
+    }, 0);
+  }
+
   calculateBalance(): number {
     return this.transactionsSubject.value.reduce((acc, curr) => {
-      const amount = curr.type === 'income' ? curr.amount : -curr.amount;
-      return acc + amount;
+      if (curr.type === TransactionType.INCOME) return acc + curr.amount;
+      if (
+        curr.type === TransactionType.EXPENSE ||
+        curr.type === TransactionType.SAVINGS
+      )
+        return acc - curr.amount;
+      return acc;
     }, 0);
   }
 }
