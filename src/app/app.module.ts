@@ -9,13 +9,11 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-import { SavingsComponent } from './pages/savings/savings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
-    SavingsComponent,
   ],
   imports: [
     BrowserModule,
