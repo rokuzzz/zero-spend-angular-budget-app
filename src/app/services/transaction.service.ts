@@ -47,23 +47,32 @@ export class TransactionService {
     this.transactionsSubject.next(transactions);
   }
 
-  // transaction.service.ts
   addTransaction(transaction: Transaction): boolean {
     const currentBalance = this.calculateBalance();
+    const currentSavings = this.calculateSavings();
 
     // Check for both expense and savings transactions
     if (
-      (transaction.type === TransactionType.EXPENSE ||
-        transaction.type === TransactionType.SAVINGS) &&
+      transaction.type === TransactionType.EXPENSE &&
       transaction.amount > currentBalance
     ) {
-      this.toastr.error(
-        transaction.type === TransactionType.SAVINGS
-          ? 'Insufficient balance to add to savings'
-          : 'Insufficient balance for this expense',
-        'Error'
-      );
+      this.toastr.error('Insufficient balance for this expense', 'Error');
       return false;
+    }
+
+    if (transaction.type === TransactionType.SAVINGS) {
+      if (transaction.amount > 0 && transaction.amount > currentBalance) {
+        // Adding to savings but not enough balance
+        this.toastr.error('Insufficient balance to add to savings', 'Error');
+        return false;
+      } else if (
+        transaction.amount < 0 &&
+        Math.abs(transaction.amount) > currentSavings
+      ) {
+        // Withdrawing from savings but not enough savings
+        this.toastr.error('Insufficient savings to withdraw', 'Error');
+        return false;
+      }
     }
 
     const currentTransactions = this.transactionsSubject.value;
@@ -72,7 +81,7 @@ export class TransactionService {
 
     this.toastr.success(
       transaction.type === TransactionType.SAVINGS
-        ? 'Added to savings successfully'
+        ? 'Savings updated successfully'
         : 'Transaction added successfully',
       'Success'
     );

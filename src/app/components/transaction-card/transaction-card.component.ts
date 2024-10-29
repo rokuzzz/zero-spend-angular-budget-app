@@ -23,7 +23,7 @@ import { TransactionType, Transaction } from '../../models/transaction.model';
 export class TransactionCardComponent implements OnInit {
   @Input() transactionType!: TransactionType;
   @Output() onTransactionAdded = new EventEmitter<Transaction>();
-  TransactionType = TransactionType; // Make enum available in template
+  TransactionType = TransactionType;
 
   form = this._formBuilder.group({
     amount: [
@@ -34,7 +34,7 @@ export class TransactionCardComponent implements OnInit {
         Validators.pattern(/^\d*\.?\d{0,2}$/),
       ],
     ],
-    title: [null], // Remove validators here
+    title: [null], 
     action: ['add', Validators.required],
   });
 
