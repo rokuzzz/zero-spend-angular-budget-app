@@ -1,105 +1,47 @@
 # Angular Budget App
 
+## Live Demo
+[Check out the app here](https://rokuzzz.github.io/zero-spend-angular-budget-app/)
+
 ## Introduction
+The Angular Budget App is a simple and intuitive application designed to help you manage your finances effectively. With this app, you can record your income and expenses, monitor your balance, and set savings goals to achieve your financial targets.
 
-In this project, you'll create a budgeting application using Angular. This app will help users manage their incomes and expenses, track their balance, and save money by setting saving targets.
+## Features
+- Record Transactions: Easily add income and expense entries to keep track of your finances.
+- View Balance: Get an instant overview of your current balance.
+- Manage Savings:
+  - Set Savings Target: Define a savings goal you want to achieve.
+  - Transfer Funds: Move money into or out of your savings account as needed.
+  - Track Progress: Monitor your progress towards your savings target with a visual progress bar.
+ 
+## Concepts Learned
+Throughout the development of this app, I have deepened my understanding of several key Angular concepts:
 
-## Description
+- Angular Philosophy and Architecture: Gained insights into how Angular applications are structured and how the framework handles data flow and component interaction.
+- Angular CLI: Learned how to efficiently use Angular CLI commands to generate components, services, and manage the application lifecycle.
+- Components and Modules: Developed a deep understanding of how to create reusable components and organize them into modules for better maintainability.
+- Templates and Data Binding: Mastered the use of templates and various data binding techniques to create dynamic and interactive user interfaces.
 
-In the Budget App, users will be able to:
+## Getting Started
+To run the app locally:
+1. Clone the Repository:
+```
+git clone https://github.com/rokuzzz/zero-spend-angular-budget-app.git
+```
 
-1. Record both incomes and expenses.
-2. Check their balance.
-3. Manage the saving:
-   - Set a targeted saving amount.
-   - Transfer money into or out of the saving account.
-   - View their progress towards reaching the saving target.
+2. Install Dependencies:
+```
+cd zero-spend-angular-budget-app
+npm install
+```
 
-## Prerequisites
+3. Run the App:
+```
+ng serve
+```
 
-Before starting on this project, ensure you've covered:
-
-- Angular Philosophy and Architecture.
-- Usage and commands in Angular CLI.
-- Deep understanding of Components and Modules.
-- Working with Templates and mastering Data Binding.
-
-## Guidelines
-
-1. Creating components:
-
-- Use the Angular CLI to generate the main components for the app:
-
-  ```
-  ng generate component transaction
-  ng generate component balance
-  ng generate component saving
-  ```
-
-2. Inside the `transaction` directory, create a new file named `transaction.model.ts`. Create an interface for the transaction which should include `amount`, `type`, and `title`. `type` could be Enumerate type either 'income' or 'expense'.
-3. `TransactionComponent`: This component can be reused for both Income and Expense entries.
-
-   - Properties:
-     - `transactionType`: Enumerate type either 'income' or 'expense'.
-     - `@Output() onTransactionAdded`: Use the `@Output()` decorator to emit an event when a transaction is added.
-     - `@Input() transactionType`: Accept an input to determine if it's handling an income or expense.
-   - Methods:
-     - `addTransaction(amount: number, title: string)`: Emit the transaction (type `Transation`) to the parent. _Hint:_ use the paramaters `amount` and `title`, and the input `transactionType` to create new transaction object. Transaction event can be emitted using syntax `this.onTransactionAdded.emit(newTransaction);`
-   - In `transaction.component.html`, design a basic form to capture transaction details. Use the `transactionType` input to display the correct title (either "Income" or "Expense") on the form. Bind the form elements to the transaction attributes and include a button to submit the form.
-
-4. `BalanceComponent`: Displays the current balance and provides options to transfer money to the saving account.
-
-   - Properties:
-     - `@Input() currentBalance`: A numeric property representing the available funds.
-     - `@Output() onTransferToSaving`: an event to transfer money from balance to saving.
-   - Methods:
-     - `transferToSavings(amount: number)`: Emit the transfer to saving event. Make sure you don't allow the `currentBalance` to become negative.
-
-5. `SavingsComponent`: Allows setting a saving target and displays a progress bar.
-
-   - Properties:
-     - `@Input() savingAmount`: Current amount saved.
-     - `targetAmount`: Target saving amount.
-     - `@Output() onTransferToSaving`: an event to transfer money from saving back to balance.
-   - Methods:
-     - `setTarget(amount: number)`: Set a new target saving amount.
-     - `transferToBalance(amount: number)`: Emit the transfer to balance event. Make sure you don't allow the `savingAmount` to become negative.
-
-6. `AppComponent`:
-
-- Properties:
-  - `savingAmount`: Current amount saved.
-  - `currentBalance`: Current balance.
-- Methods:
-    - `handleAddTransaction(transaction: Transaction) `: This method updates the `currentBalance` when transaction is added in the `TransactionComponent`.
-    - `handleTransferToBalance(amount: number)`: This method updates the `currentBalance` and `SavingAmount` when transafering money from saving back to balance in `SavingComponent`
-    - `handleTransferToSaving(amount: number)`: This method updates the `currentBalance` and `SavingAmount` when transafering money from balance to saving in `BalanceComponent`.
-- `app.component.html` example:
-    ```
-    <div class="container">
-        <h1>Welcome to the Budget App</h1>
-
-        <!-- Display the Balance -->
-        <app-balance [currentBalance]="currentBalance"
-                    (onTransferToSaving)="handleTransferToSaving($event)">
-        </app-balance>
-
-        <!-- Add Income and Expense -->
-        <div class="transactions">
-            <!-- Income Transaction -->
-            <app-transaction (onTransactionAdded)="handleAddTransaction($event)"
-                            [transactionType]="'income'">
-            </app-transaction>
-
-            <!-- Expense Transaction -->
-            <app-transaction (onTransactionAdded)="handleAddTransaction($event)"
-                            [transactionType]="'expense'">
-            </app-transaction>
-        </div>
-
-        <!-- Manage and Display Savings -->
-        <app-saving [savingAmount]="savingAmount"
-                    (onTransferToBalance)="handleTransferToBalance($event)">
-        </app-saving>
-    </div>
-    ```
+## Technologies Used
+- Angular
+- TypeScript
+- Tailwind CSS
+- Angular Material
